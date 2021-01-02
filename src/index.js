@@ -4,15 +4,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./components/App";
 import "./index.css";
-import congigureStore from "./components/redux/configureStore";
-import { provider } from "react-redux";
+import configureStore from "./components/redux/configureStore";
+import { Provider as ReduxProvider } from "react-redux";
 
-const store = congigureStore();
+const store = configureStore();
 render(
-  <provider store={store}>
+  <ReduxProvider store={store}>
     <Router>
       <App />
     </Router>
-  </provider>,
+  </ReduxProvider>,
   document.getElementById("app")
 );

@@ -1,4 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
+import * as courseActions from "../redux/actions/courseActions";
+import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
 
 class CoursesPage extends React.Component {
   state = {
@@ -10,12 +14,11 @@ class CoursesPage extends React.Component {
   handleChange = (e) => {
     const course = { ...this.state.course, title: e.target.value };
     this.setState({ course });
-    console.log(this.state.course.title);
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log("hellooooooooooo", this.state.title);
+    this.props.actions.createCourse(this.state.course);
   };
   render() {
     return (
@@ -28,10 +31,30 @@ class CoursesPage extends React.Component {
           value={this.state.course.title}
         />
         <input type="submit" value="save" />
-        <h2>{this.state.course.title}</h2>
+
+        {this.props.courses.map((course) => (
+          <div key={course.title}>{course.title} </div>
+        ))}
       </form>
     );
   }
 }
-
-export default CoursesPage;
+//Proptypes
+CoursesPage.propTypes = {
+  courses: PropTypes.array.isRequired,
+  // createCourse: PropTypes.func.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+function mapDispatchToProps(dispatch) {
+  return {
+    //createCourse: (course) => dispatch(courseActions.createCourse(course)),
+    actions: bindActionCreators(courseActions, dispatch),
+  };
+}
+//conect this component to redux
+function mapStateToProps(state) {
+  return {
+    courses: state.courses,
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CoursesPage);
